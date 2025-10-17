@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ + HTML Integration | Programming Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles untuk notifikasi login */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .notification-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .notification-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .notification-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .notification-card p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+        
+        .notification-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Style untuk sapaan user */
+        .user-welcome {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin: 20px auto;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+            display: none;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Date display */
+        .date-display {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-top: 20px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+
+        /* Code explanation */
+        .code-explanation {
+            background: linear-gradient(135deg, #f0fff4, #e6fffa);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #48bb78;
+        }
+
+        .code-explanation h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-explanation h4::before {
+            content: "💡";
+        }
+
+        .explanation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .explanation-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .explanation-list li:last-child {
+            border-bottom: none;
+        }
+
+        .explanation-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Hide Switch-Case section */
+        .switch-case-section {
+            display: none;
+        }
+
+        /* Custom Modal Styles */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Modal Logout Styles */
+        .logout-modal .modal-content {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+
+        .modal-header {
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .modal-btn.primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .logout-modal .modal-btn.primary {
+            background: white;
+            color: #e53e3e;
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* White text for grade categories */
+        .output strong {
+            color: white !important;
+            background: none !important;
+            -webkit-text-fill-color: white !important;
+            font-weight: 600;
+        }
+
+        /* Validasi Mata Kuliah */
+        .subject-selector.error {
+            border: 2px solid #e53e3e;
+            background: linear-gradient(135deg, #fed7d7, #feb2b2);
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #feb2b2;
+            font-size: 0.9em;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .subject-validation {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .subject-validation.error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+
+        .subject-validation.success {
+            background: #c6f6d5;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+        }
+
+        /* Zoom Overlay Styles */
+        .zoom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            cursor: zoom-out;
+            padding: 0;
+        }
+
+        .zoom-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .zoomed-image {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            border-radius: 0;
+            box-shadow: none;
+            cursor: default;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        .close-zoom-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 40%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 2001;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.6);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .close-zoom-btn:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.8);
+        }
+
+        .download-zoom-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 60%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 2001;
+            box-shadow: 0 10px 30px rgba(72, 187, 120, 0.6);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .download-zoom-btn:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 35px rgba(72, 187, 120, 0.8);
+        }
+
+        /* Style untuk gambar code */
+        .code-image {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            margin: 25px auto;
+            display: block;
+            border: 3px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .code-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Notifikasi Login Berhasil -->
+    <div id="loginNotification"></div>
+
+    <!-- Custom Modal untuk Input Nilai -->
+    <div id="nilaiModal" class="custom-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="font-size: 3em; margin-bottom: 10px;">🎯</div>
+                <h3>Input Nilai Mata Kuliah</h3>
+                <p id="modalSubject">Mata Kuliah: <span id="selectedSubject"></span></p>
+            </div>
+            <input type="number" 
+                   id="nilaiInput" 
+                   class="modal-input" 
+                   placeholder="Masukkan nilai (0-100)" 
+                   min="0" 
+                   max="100"
+                   required>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="prosesNilai()" id="prosesNilaiBtn">
+                    ✅ Proses Nilai
+                </button>
+                <button class="modal-btn secondary" onclick="tutupModal()">
+                    ❌ Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zoom Overlay -->
+    <div class="zoom-overlay" id="zoomOverlay">
+        <img src="" alt="Zoomed Image" class="zoomed-image" id="zoomedImage">
+        <button class="close-zoom-btn" onclick="closeZoom()">🔙 Kembali</button>
+        <button class="download-zoom-btn" onclick="downloadImage()">📥 Download</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🚀 C++ Backend + HTML Frontend</h1>
+            <p>Demonstrasi Integrasi Bahasa Pemrograman C++ dengan Teknologi Web Modern</p>
+            <div class="date-display" id="currentDate">
+                <!-- Tanggal akan diisi oleh JavaScript -->
+            </div>
+        </header>
+
+        <!-- Sapaan User -->
+        <div class="user-welcome" id="userWelcome">
+            <span>👋 Selamat datang, <strong id="userNamePlaceholder">Tamu</strong>!</span>
+            <button class="logout-btn" onclick="bukaModalLogout()">🚪 Logout</button>
+        </div>
+
+        <div class="demo-section">
+            <h2>Hasil Analisis Kondisional</h2>
+            
+            <!-- If-Else Statement -->
+            <div class="output-card">
+                <h3>📊 If-Else Statement (Penentuan Grade)</h3>
+                <div class="result">
+                    <div class="result-item">
+                        <span class="value">Nilai: 85</span>
+                        <span class="arrow">→</span>
+                        <span class="output">Grade: <strong>B (Baik)</strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="value">Nilai: 55</span>
+                        <span class="arrow">→</span>
+                        <span class="output">Grade: <strong>E (Sangat Kurang)</strong></span>
+                    </div>
+                </div>
+                <!-- Gambar menggantikan code preview -->
+                <img src="gambar2.jpg" alt="Code If-Else Penentuan Grade" class="code-image" 
+                     onclick="zoomImage(this)" ondblclick="zoomImage(this)">
+                <div class="code-explanation">
+                    <h4>Alasan Pemilihan If-Else:</h4>
+                    <ul class="explanation-list">
+                        <li><strong>Range Berurutan:</strong> Nilai memiliki range yang berurutan (90-100, 80-89, dll)</li>
+                        <li><strong>Kondisi Bertingkat:</strong> If-Else ideal untuk kondisi yang saling berkaitan</li>
+                        <li><strong>Evaluasi Berurutan:</strong> Pengecekan dilakukan dari nilai tertinggi ke terendah</li>
+                        <li><strong>Default Case:</strong> Else menangani semua nilai di bawah 60</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- If-Else Validasi -->
+            <div class="output-card">
+                <h3>🔐 If-Else Statement (Validasi Input)</h3>
+                <div class="result">
+                    <div class="result-item">
+                        <span class="value">Username: "admin", Password: "12345"</span>
+                        <span class="arrow">→</span>
+                        <span class="output"><strong style="color: #48bb78;">Login Berhasil</strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="value">Username: "user", Password: "wrong"</span>
+                        <span class="arrow">→</span>
+                        <span class="output"><strong style="color: #e53e3e;">Password salah!</strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="value">Username: "", Password: "12345"</span>
+                        <span class="arrow">→</span>
+                        <span class="output"><strong style="color: #e53e3e;">Username tidak boleh kosong!</strong></span>
+                    </div>
+                </div>
+                <!-- Gambar menggantikan code preview -->
+                <img src="log.jpg" alt="Code If-Else Validasi" class="code-image"
+                     onclick="zoomImage(this)" ondblclick="zoomImage(this)">
+                <div class="code-explanation">
+                    <h4>Alasan Pemilihan If-Else untuk Validasi:</h4>
+                    <ul class="explanation-list">
+                        <li><strong>Validasi Bertahap:</strong> If-Else ideal untuk pengecekan step-by-step</li>
+                        <li><strong>Kondisi Kompleks:</strong> Dapat menangani nested conditions dengan baik</li>
+                        <li><strong>Early Return:</strong> Bisa langsung return ketika validasi gagal</li>
+                        <li><strong>Readability:</strong> Mudah dibaca dan dipahami flow validasinya</li>
+                        <li><strong>Flexibility:</strong> Bisa menambahkan kondisi validasi baru dengan mudah</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Kombinasi If-Else & Switch-Case -->
+            <div class="output-card">
+                <h3>🔥 Kombinasi If-Else & Switch-Case</h3>
+                <div class="result">
+                    <div class="result-item">
+                        <span class="value">Kategori B + Skor 85</span>
+                        <span class="arrow">→</span>
+                        <span class="output"><strong>Kategori B - Good Job!</strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="value">Kategori C + Skor 75</span>
+                        <span class="arrow">→</span>
+                        <span class="output"><strong>Perlu improvement</strong></span>
+                    </div>
+                </div>
+                <!-- Gambar menggantikan code preview -->
+                <img src="gambar1.jpg" alt="Code Kombinasi If-Else & Switch-Case" class="code-image"
+                     onclick="zoomImage(this)" ondblclick="zoomImage(this)">
+                <div class="code-explanation">
+                    <h4>Alasan Kombinasi:</h4>
+                    <ul class="explanation-list">
+                        <li><strong>Kondisi Bertingkat:</strong> If-Else untuk range skor, Switch untuk kategori</li>
+                        <li><strong>Efisiensi:</strong> Switch hanya dieksekusi jika skor >= 80</li>
+                        <li><strong>Flexibility:</strong> Kombinasi memberikan fleksibilitas untuk logika kompleks</li>
+                        <li><strong>Maintainability:</strong> Mudah ditambah kategori baru tanpa mengubah struktur</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript Interactive Section -->
+        <div class="interactive-section">
+            <h2>🎮 Demo Interaktif JavaScript</h2>
+            <p>Fungsi yang sama dengan C++, diimplementasi dalam JavaScript</p>
+            
+            <!-- Dropdown Mata Kuliah -->
+            <div class="subject-selector" id="subjectSelector">
+                <h3>📚 Pilih Mata Kuliah</h3>
+                <select id="subjectSelect" class="subject-dropdown">
+                    <option value="">-- Pilih Mata Kuliah --</option>
+                    <option value="Logika Informatika">Logika Informatika</option>
+                    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                    <option value="Pengantar Teknologi dan Informasi">Pengantar Teknologi dan Informasi</option>
+                    <option value="Arsitektur dan Organisasi Komputer">Arsitektur dan Organisasi Komputer</option>
+                    <option value="Pancasila">Pancasila</option>
+                    <option value="Pemrograman Dasar">Pemrograman Dasar</option>
+                    <option value="Agama Islam">Agama Islam</option>
+                </select>
+                <div id="subjectValidation" class="subject-validation"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="interactive-btn" onclick="bukaModalInput()">
+                    🔢 Coba Input Nilai
+                </button>
+            </div>
+            <div id="js-output" class="js-output">
+                <!-- Output akan diisi oleh JavaScript -->
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>🔧 Teknologi yang Digunakan</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>⚙️ Backend C++</h4>
+                    <ul>
+                        <li>Compiler: GCC 15.2.0</li>
+                        <li>Control Flow: If-Else & Switch-Case</li>
+                        <li>Environment: MSYS2 UCRT64</li>
+                        <li>Standard: C++17</li>
+                        <li>Build System: Native Compilation</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>🎨 Frontend Web</h4>
+                    <ul>
+                        <li>HTML5 Semantic Elements</li>
+                        <li>CSS3 dengan Modern Features</li>
+                        <li>JavaScript ES6+</li>
+                        <li>Responsive Design</li>
+                        <li>Glassmorphism Design</li>
+                    </ul>
+                </div>
+                <div class="tech-item">
+                    <h4>🛠 Development Tools</h4>
+                    <ul>
+                        <li>Visual Studio Code</li>
+                        <li>Windows PowerShell</li>
+                        <li>Live Server Extension</li>
+                        <li>Git Version Control</li>
+                        <li>Modern Browser DevTools</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>✨ Dibuat dengan segenap nyawa menggunakan C++, HTML, CSS, dan JavaScript</p>
+            <p>Demonstrasi Control Flow: If-Else & Switch-Case dalam Multiple Programming Languages By Diva</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Fungsi untuk download gambar
+        function downloadImage() {
+            const zoomedImage = document.getElementById('zoomedImage');
+            const imageUrl = zoomedImage.src;
+            
+            // Buat nama file berdasarkan nama gambar asli
+            const fileName = imageUrl.split('/').pop() || 'code-image.jpg';
+            
+            // Buat element link untuk download
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = fileName;
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('📥 Downloading image:', fileName);
+        }
+
+        // Fungsi untuk zoom gambar dengan error handling
+        function zoomImage(imgElement) {
+            const zoomOverlay = document.getElementById('zoomOverlay');
+            const zoomedImage = document.getElementById('zoomedImage');
+            
+            console.log('🖼️ Source image:', imgElement.src);
+            
+            // Cek apakah gambar ada
+            zoomedImage.onerror = function() {
+                console.error('❌ Gambar tidak bisa dimuat:', imgElement.src);
+                alert('Gambar tidak ditemukan! Pastikan file gambar ada di folder yang benar.');
+                closeZoom();
+            };
+            
+            zoomedImage.onload = function() {
+                console.log('✅ Gambar berhasil dimuat');
+            };
+            
+            zoomedImage.src = imgElement.src;
+            zoomOverlay.classList.add('active');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fungsi untuk close zoom
+        function closeZoom() {
+            const zoomOverlay = document.getElementById('zoomOverlay');
+            zoomOverlay.classList.remove('active');
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close zoom ketika klik di luar gambar
+        document.getElementById('zoomOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeZoom();
+            }
+        });
+
+        // Close zoom dengan ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeZoom();
+            }
+        });
+    </script>
+</body>
+</html>

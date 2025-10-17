@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - C++ Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .login-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .login-info {
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.9em;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .login-features {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-badge {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .login-input.with-icon {
+            padding-left: 50px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 40px 25px;
+                margin: 10px;
+            }
+            
+            .login-title {
+                font-size: 2em;
+            }
+            
+            .login-features {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo/Header -->
+            <div style="margin-bottom: 30px;">
+                <div style="font-size: 3em; margin-bottom: 10px;">🔐</div>
+                <h1 class="login-title">Login System</h1>
+            </div>
+            
+            <p class="login-subtitle">
+                Masukkan nama Anda untuk mengakses<br>
+                <strong>Demo C++ + HTML Integration</strong>
+            </p>
+            
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="input-group">
+                    <span class="input-icon">👤</span>
+                    <input type="text" 
+                           class="login-input with-icon"
+                           placeholder="Ketik nama Anda di sini..." 
+                           id="namaInput"
+                           required
+                           autofocus
+                           autocomplete="name">
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    🚀 Masuk ke Demo
+                </button>
+            </form>
+
+            <!-- Features Info -->
+            <div class="login-features">
+                <span class="feature-badge">C++ Backend</span>
+                <span class="feature-badge">HTML Frontend</span>
+                <span class="feature-badge">JavaScript</span>
+            </div>
+            
+            <!-- Footer Info -->
+            <div class="login-info">
+                <p>✨ <strong>Fitur yang akan Anda dapatkan:</strong></p>
+                <p style="margin-top: 8px; font-size: 0.85em;">
+                    Demo If-Else & Switch-Case • Notifikasi Personal • Interactive JavaScript
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Fungsi untuk menangani login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const namaInput = document.getElementById('namaInput');
+            const nama = namaInput.value.trim();
+            
+            if (nama) {
+                if (nama.length < 2) {
+                    showError('Nama harus minimal 2 karakter!');
+                    return;
+                }
+                localStorage.setItem('userName', nama);
+                sessionStorage.setItem('justLoggedIn', 'true');
+                const submitBtn = document.querySelector('.login-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '🔄 Memproses...';
+                submitBtn.disabled = true;
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000); 
+            } else {
+                showError('Silakan masukkan nama Anda!');
+            }
+        }
+        
+        // Fungsi untuk menampilkan error
+        function showError(message) {
+            // Hapus error sebelumnya
+            const existingError = document.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Buat element error
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+            errorElement.style.cssText = `
+                background: #fed7d7;
+                color: #c53030;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                border: 1px solid #feb2b2;
+                font-size: 0.9em;
+                animation: fadeInUp 0.3s ease-out;
+            `;
+            errorElement.textContent = message;
+            
+            // Sisipkan sebelum form
+            const form = document.getElementById('loginForm');
+            form.parentNode.insertBefore(errorElement, form);
+            
+            // Focus ke input
+            document.getElementById('namaInput').focus();
+        }
+        
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        
+        // Enter key support
+        document.getElementById('namaInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin(e);
+            }
+        });
+        
+        // Real-time validation
+        document.getElementById('namaInput').addEventListener('input', function() {
+            // Hapus error message saat user mulai mengetik
+            const existingError = document.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        });
+        
+        // Auto-focus dan select semua text saat halaman load
+        document.addEventListener('DOMContentLoaded', function() {
+            const namaInput = document.getElementById('namaInput');
+            namaInput.focus();
+            namaInput.select();
+            
+            // Cek jika ada nama sebelumnya
+            const previousName = localStorage.getItem('userName');
+            if (previousName) {
+                namaInput.value = previousName;
+                namaInput.select();
+            }
+        });
+        
+        // Animasi untuk input focus
+        document.getElementById('namaInput').addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+        
+        document.getElementById('namaInput').addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>
